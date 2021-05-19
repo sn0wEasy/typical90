@@ -36,9 +36,9 @@ void COMinit() {
     finv[0] = finv[1] = 1;
     inv[1] = 1;
     for (int i = 2; i < MAX; i++){
-        fac[i] = fac[i - 1] * i % MOD;
-        inv[i] = MOD - inv[MOD%i] * (MOD / i) % MOD;
-        finv[i] = finv[i - 1] * inv[i] % MOD;
+        fac[i] = fac[i - 1] * i % MOD;  // i までの累積積
+        inv[i] = MOD - inv[MOD%i] * (MOD / i) % MOD;  // i の逆元
+        finv[i] = finv[i - 1] * inv[i] % MOD;  // i の逆元までの逆元の累積積
     }
 }
 
@@ -46,6 +46,7 @@ void COMinit() {
 long long COM(int n, int k){
     if (n < k) return 0;
     if (n < 0 || k < 0) return 0;
+    // 二項係数は n! * (k!の逆元) * ((n-k)!の逆元) で求められる
     return fac[n] * (finv[k] * finv[n - k] % MOD) % MOD;
 }
 
