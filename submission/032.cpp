@@ -26,32 +26,46 @@ template<typename T> void remove(std::vector<T>& vector, unsigned int index)
 { vector.erase(vector.begin() + index); }
 
 
-// 参考：https://ei1333.github.io/luzhiled/snippets/math/prime-table.html
-// N以下の素数の列挙はO(NloglogN)
-vector<int> prime_cnt(int n) {
-  vector<int> prime(n+1, 0);
-  if(n >= 0) prime[0] = 0;
-  if(n >= 1) prime[1] = 0;
-  for(int i = 2; i <= n; i++) {
-    if(prime[i] != 0) continue;
-    for(int j = i; j <= n; j += i) {
-      prime[j]++;
-    }
-  }
-  return prime;
-}
 
 int main() {
 
-  int N, K;  cin >> N >> K;
-
-  auto t = prime_cnt(N);
-  int ans = 0;
-  rep(i, N+1) {
-    if (t[i] >= K) ans++;
+  int N;  cin >> N;
+  vector<vector<int>> A(N, vector<int>(N));
+  rep(i, N) {
+    rep(j, N) {
+      cin >> A[i][j];
+    }
+  }
+  int M;  cin >> M;
+  vector<vector<bool>> P(N, vector<bool>(N, false));  // 仲違いを記録
+  rep(i, M) {
+    int a, b;
+    cin >> a >> b;
+    a--; b--;
+    P[a][b] = true;
+    P[b][a] = true;
   }
 
-  print(ans);
+  vector<int> v(N);
+  rep(i, N) v[i] = i;
+  int ans = INF;
+  // N! の順列を列挙
+  do {
+    int tmp = A[v[0]][0];
+    rep1(i, N) {
+      // 順列に仲違いがないか確認
+      if (P[v[i-1]][v[i]]) {
+        tmp = INF;
+        break;
+      }
+      // コストを追加
+      tmp += A[v[i]][i];
+    }
+    ans = min(ans, tmp);
+  } while (next_permutation(v.begin(), v.end()));
+
+  if (ans != INF) print(ans);
+  else print(-1);
 
   return 0;
 }

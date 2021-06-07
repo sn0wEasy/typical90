@@ -25,33 +25,16 @@ template<class T> inline auto __lcm(T& a, T& b)
 template<typename T> void remove(std::vector<T>& vector, unsigned int index)
 { vector.erase(vector.begin() + index); }
 
+// 文字列 s に文字列 t が含まれていれば true
+template<class T> inline bool contains(T& s, T& t)
+{ if (s.find(t) != string::npos) { return true; } return false; }
 
-// 参考：https://ei1333.github.io/luzhiled/snippets/math/prime-table.html
-// N以下の素数の列挙はO(NloglogN)
-vector<int> prime_cnt(int n) {
-  vector<int> prime(n+1, 0);
-  if(n >= 0) prime[0] = 0;
-  if(n >= 1) prime[1] = 0;
-  for(int i = 2; i <= n; i++) {
-    if(prime[i] != 0) continue;
-    for(int j = i; j <= n; j += i) {
-      prime[j]++;
-    }
-  }
-  return prime;
-}
 
 int main() {
 
-  int N, K;  cin >> N >> K;
-
-  auto t = prime_cnt(N);
-  int ans = 0;
-  rep(i, N+1) {
-    if (t[i] >= K) ans++;
-  }
-
-  print(ans);
+  int H, W;  cin >> H >> W;
+  if (H<2 || W<2) print(H*W);
+  else print(((H+1)/2) * ((W+1)/2));
 
   return 0;
 }
